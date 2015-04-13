@@ -1,5 +1,5 @@
-#ifndef _KEYDB_DISK_H_
-#define _KEYDB_DISK_H_
+#ifndef _KEYDB_DRIVE_H_
+#define _KEYDB_DRIVE_H_
 
 #include <cstdio>
 
@@ -8,10 +8,14 @@
 
 namespace KeyDB {
 
-class Disk
+class Drive
 {
 public:
-  virtual ~Disk() { }
+  Drive() = default;
+  Drive(const Drive &) = delete;
+  Drive & operator = (const Drive &) = delete;
+
+  virtual ~Drive() { }
 
   /*!
    * Read a series of blocks from disk
@@ -62,12 +66,12 @@ public:
   /*!
    * Create a new file on disk, if the file exists the file will be recreated
    */
-  virtual void reset(Slice path) = 0;
+  virtual void reset(Slice path = Slice()) = 0;
 
   /*!
    * Open a file on the disk, throw exception when file is unable to read
    */
-  virtual void open(Slice path) = 0;
+  virtual void open(Slice path = Slice()) = 0;
 
   /*!
    * Flush data to disk
@@ -80,7 +84,7 @@ public:
   virtual void close() = 0;
 };
 
-class NaiveDisk : public Disk
+class NaiveDisk : public Drive
 {
   std::FILE *fd = nullptr;
   Slice path;
@@ -88,6 +92,10 @@ class NaiveDisk : public Disk
   Buffer extendBuffer(Buffer src) const;
 
 public:
+  NaiveDisk(Slice path = Slice())
+  : path(path)
+  { }
+
   virtual ~NaiveDisk();
 
   virtual Buffer readBlocks(Config::size_t index, Config::size_t count);
@@ -97,11 +105,11 @@ public:
     Buffer buf);
 
   virtual void reset(Slice path = Slice());
-  virtual void open(Slice path);
+  virtual void open(Slice path = Slice());
   virtual void flush();
   virtual void close();
 };
 
 };
 
-#endif // _KEYDB_DISK_H_
+#endif // _KEYDB_DRIVE_H_

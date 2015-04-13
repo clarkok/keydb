@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "disk.h"
+#include "drive.h"
 #include "config.h"
 #include "exception.h"
 
@@ -86,7 +86,10 @@ NaiveDisk::open(Slice p)
 {
   if (fd)
     close();
-  this->path = p;
+  if (p.length())
+    this->path = p;
+  else
+    p = this->path;
   fd = std::fopen(p.data(), "r+");
   if (!fd) {
     THROW_EXCEPTION(

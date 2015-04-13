@@ -4,7 +4,7 @@
 #include <cstring>
 #include <algorithm>
 
-#include "../config.h"
+#include "config.h"
 
 namespace KeyDB {
 

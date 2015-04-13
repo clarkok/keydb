@@ -1,26 +1,12 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "../lib/slice.h"
+#include "lib/slice.h"
+#include "test_utils.h"
 
 using namespace KeyDB;
 
 static const char TEST_STRING[] = "Test String";
-
-static char *
-randomString(char *s, int length)
-{
-  static const char array[] =
-    "0123456789"
-    "abcdefghijklmnopqrstuvwxyz"
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  for (int i = 0; i < length; ++i)
-    s[i] = array[std::rand() % (sizeof(array) - 1)];
-
-  s[length] = '\0';
-  return s;
-}
 
 TEST(SliceTest, Constructor)
 {

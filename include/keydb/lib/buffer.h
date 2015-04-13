@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 
-#include "../config.h"
+#include "config.h"
 #include "slice.h"
 
 namespace KeyDB {
@@ -53,10 +53,12 @@ public:
   { }
 
   Buffer(const char *data, Config::size_t length = 0)
-  : pimpl(sharedPtrFactory(
-      bufferImplFactory(length ? length : length = std::strlen(data)))),
-  content_(pimpl->content), length_(length)
-  { std::memcpy(pimpl->content, data, length); }
+  : pimpl(data ? 
+    sharedPtrFactory(
+      bufferImplFactory(length ? length : length = std::strlen(data))
+    ) : nullptr),
+  content_(data ? pimpl->content : nullptr), length_(data ? length : 0)
+  { if (data) std::memcpy(pimpl->content, data, length); }
 
   Buffer(Slice s)
   : Buffer(s.data(), s.length())

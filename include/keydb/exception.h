@@ -15,6 +15,7 @@ enum ExceptionType
   E_OK = 0,
 
   E_IO_ERROR,
+  E_FORMAT_ERROR,
 
   E_UNKNOWN = -1
 };
@@ -75,6 +76,10 @@ operator << (std::ostream &os, const Exception &e)
 
 #define __THROW_E_GET_MACRO(_1, _2, _3, _name, ...) _name
 
+/*!
+ * Construct and throw an exception
+ * THROW_EXCEPTION(code[, msg1[, msg2])
+ */
 #define THROW_EXCEPTION(...) \
   do { \
     ::KeyDB::Exception e = __THROW_E_GET_MACRO(__VA_ARGS__, \
@@ -83,6 +88,10 @@ operator << (std::ostream &os, const Exception &e)
     throw e; \
   } while (0)
 
+/*!
+ * Throw an exception
+ * THROW(e)
+ */
 #define THROW(e) \
   do { \
     e.vaprintf("\nThrow from: %s:%d\n", __FILE__, __LINE__); \

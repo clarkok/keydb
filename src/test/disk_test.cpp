@@ -1,11 +1,23 @@
 #include <gtest/gtest.h>
 
-#include "../disk.h"
-#include "../exception.h"
+#include "drive/drive.h"
+#include "exception.h"
 
 using namespace KeyDB;
 
 static char TEST_STRING[] = "Test String";
+
+TEST(NaiveDiskTest, Constructor)
+{
+  system("touch test_data/naive_disk_open.db");
+  NaiveDisk uut("test_data/naive_disk_open.db");
+  try {
+    uut.open(); 
+  }
+  catch (const Exception &e) {
+    ASSERT_EQ("", e.toString());
+  }
+}
 
 TEST(NaiveDiskTest, Operation)
 {

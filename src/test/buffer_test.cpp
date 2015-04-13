@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../lib/buffer.h"
+#include "lib/buffer.h"
 
 using namespace KeyDB;
 
@@ -29,6 +29,10 @@ TEST(BufferTest, Constructor)
 
   const_cast<char*>(uut5.cdata())[0] = 'R';
   ASSERT_EQ('R', uut4.cdata()[0]);
+
+  Buffer uut6(nullptr);
+  ASSERT_EQ(0, uut6.length());
+  ASSERT_EQ(nullptr, uut6.cdata());
 }
 
 TEST(BufferTest, Operation)

@@ -1,8 +1,10 @@
 # basic
 TARGET		= gtest
 TESTS			= test/slice_test.cpp test/buffer_test.cpp test/exception_test.cpp \
-						test/disk_test.cpp
-SOURCES		= $(TESTS) main.cpp naive_disk.cpp
+						test/disk_test.cpp test/utils_test.cpp test/main.cpp \
+						test/db_test.cpp test/hashtable_test.cpp
+LIB_SRC 	= drive/naive_disk.cpp utils.cpp db_impl.cpp drive/bitmap.cpp
+SOURCES		= $(TESTS) $(LIB_SRC)
 
 # directories
 SOURCE_DIR	= src/
@@ -14,7 +16,7 @@ DEPENDENCY_DIR	= dep/
 COMPILER	= clang++
 LINKER		= clang++
 
-COMMON_FLAGS	= -std=c++11 -Wall -g -I$(INCLUDE_DIR)
+COMMON_FLAGS	= -std=c++11 -Wall -g -I$(INCLUDE_DIR) -Iinclude/keydb/
 COMPILE_FLAGS	= $(COMMON_FLAGS) -c
 LINK_FLAGS	= $(COMMON_FLAGS) -g -lpthread -lgtest -lgtest_main -lcrypto -L/usr/lib
 DEP_FLAGS	= $(COMMON_FLAGS) -MM -MF $(DEPENDENCY_DIR)$$(addsuffix .d,$$(basename $$(subst /,-,$$<)))

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "../exception.h"
+#include "exception.h"
 
 using namespace KeyDB;
 
@@ -23,10 +23,5 @@ TEST(ExceptionTest, Printf)
 
 TEST(ExceptionTest, Macro)
 {
-  try {
-    THROW_EXCEPTION(E_UNKNOWN);
-  }
-  catch (const Exception &e) {
-    std::cout << e << std::endl;
-  }
+  EXPECT_THROW({ THROW_EXCEPTION(E_UNKNOWN); }, Exception);
 }
