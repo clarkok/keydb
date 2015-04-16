@@ -16,6 +16,7 @@ struct SuperBlockData
   Config::size_t bitmap_length; // bitmap_length in block
   Config::size_t index_start;   // index_start index in block
   Config::size_t index_length;  // index_length in block
+  Config::size_t entry_count;   // count of entries
 };
 
 // SuperBlock is always a block size

@@ -41,7 +41,21 @@ public:
     Config::size_t &
     value()
     { return entry->value; }
+
+    Iterator
+    next() const
+    {
+      for (Entry *i = entry; 
+        i != reinterpret_cast<Entry*>(owner->data.end()); ++i) {
+        if (i->value != 0 && i->value != DELETED_VALUE)
+          return owner->iteratorFactory(i);
+      }
+      return owner->iteratorFactory(nullptr);
+    }
   };
+
+  Buffer data;
+  Config::size_t capacity;
 
 private:
   inline Iterator
@@ -60,10 +74,6 @@ private:
     }
     return ret;
   }
-
-  Buffer data;
-  Config::size_t size;
-  Config::size_t capacity;
 
   inline Entry*
   findSetterPosition(
@@ -116,9 +126,13 @@ private:
 public:
   HashTable()
   : data(Config::BLOCK_SIZE),
-    size(0),
     capacity(Config::BLOCK_SIZE / sizeof(Entry))
   { std::fill(data.begin(), data.end(), 0); }
+
+  HashTable(Buffer data)
+  : data(data),
+    capacity(data.length() / sizeof(Entry))
+  { }
 
   inline Iterator
   getSetterIterator(Config::size_t key)
@@ -162,6 +176,45 @@ public:
     }
     return DELETED_VALUE;
   }
+
+  inline Config::size_t
+  resize(Config::size_t size)
+  {
+    Buffer new_data(size);
+    std::fill(new_data.begin(), new_data.end(), 0);
+
+    std::swap(data, new_data);
+
+    auto limit = reinterpret_cast<const Entry*>(new_data.cend());
+
+    capacity = data.length() / sizeof(Entry);
+
+    for (auto i = reinterpret_cast<const Entry*>(new_data.cbegin());
+        i != limit; ++i) {
+      if (i->value == DELETED_VALUE || i->value == 0)
+        continue;
+      auto iter = getSetterIterator(i->key);
+      while (iter.value() != DELETED_VALUE)
+        iter = nextSetterIterator(iter);
+      iter.value() = i->value;
+    }
+
+    return data.length();
+  }
+
+  inline Iterator
+  begin()
+  {
+    for (Entry *iter = reinterpret_cast<Entry*>(data.begin());
+    iter != reinterpret_cast<Entry*>(data.end()); ++iter)
+      if (iter->value != 0 && iter->value != DELETED_VALUE)
+        return iteratorFactory(iter);
+    return iteratorFactory(nullptr);
+  }
+
+  inline Iterator
+  end()
+  { return iteratorFactory(nullptr); }
 };
 
 }

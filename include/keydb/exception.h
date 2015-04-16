@@ -16,6 +16,8 @@ enum ExceptionType
 
   E_IO_ERROR,
   E_FORMAT_ERROR,
+  E_NO_ENTRY,
+  E_ENTRY_EXISTS,
 
   E_UNKNOWN = -1
 };

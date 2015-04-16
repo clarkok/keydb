@@ -8,11 +8,7 @@ namespace KeyDB {
 /*!
  * Key in memory
  */
-struct Key
-{
-  uint64_t hash;
-  Buffer content;
-};
+typedef Slice Key;
 
 /*!
  * Value in memory

@@ -100,3 +100,25 @@ TEST(HashTableTest, EraseOverConflict)
   ASSERT_EQ(TEST_NUMBER + 2 * Config::BLOCK_SIZE,
     uut.getGetterIterator(TEST_NUMBER + 2 * Config::BLOCK_SIZE).value());
 }
+
+TEST(HashTableTest, Resize)
+{
+  HashTable uut;
+
+  for (int i = 1; i < 10; ++i) {
+    uut.getSetterIterator(i).value() = i;
+  }
+
+  for (int i = 1; i < 10; ++i) {
+    uut.getSetterIterator(i + Config::BLOCK_SIZE).value() = i + Config::BLOCK_SIZE;
+  }
+
+  ASSERT_EQ(2 * Config::BLOCK_SIZE, uut.resize(2 * Config::BLOCK_SIZE));
+
+  ASSERT_EQ(64, uut.capacity);
+
+  for (int i = 1; i < 10; ++i) {
+    ASSERT_EQ(i, uut.getGetterIterator(i).value());
+    ASSERT_EQ(i + Config::BLOCK_SIZE, uut.getGetterIterator(i + Config::BLOCK_SIZE).value());
+  }
+}

@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 
-#include "config.h"
+#include "../config.h"
 #include "slice.h"
 
 namespace KeyDB {

@@ -1,10 +1,11 @@
 #ifndef _KEYDB_LIB_SLICE_H_
 #define _KEYDB_LIB_SLICE_H_
 
+#include <string>
 #include <cstring>
 #include <algorithm>
 
-#include "config.h"
+#include "../config.h"
 
 namespace KeyDB {
 
@@ -52,6 +53,10 @@ public:
   inline 
   operator bool () const
   { return data() && length(); }
+
+  inline std::string
+  toString() const
+  { return std::string(begin(), end()); }
 };
 
 inline bool
