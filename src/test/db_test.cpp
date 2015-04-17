@@ -84,4 +84,6 @@ TEST(DBTest, Operation)
     ASSERT_EQ("", e.toString());
     uut->close();
   }
+
+  EXPECT_THROW({uut->insert("Test", "test1");}, Exception);
 }

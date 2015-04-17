@@ -199,6 +199,7 @@ DBImpl::insert(Key key, Value value)
       key.toString().c_str(),
       valueOfEntry(entry).toString().c_str()
     );
+    THROW(e);
   }
   entry = makeEntry(key, hash_code, value);
 
@@ -210,10 +211,14 @@ DBImpl::insert(Key key, Value value)
   if (super_block.setEntryCount(super_block.getEntryCount() + 1)
       >= index.getUpperLimit()) {
     index.resize(index.getCapacity() * 2 * Config::BLOCK_SIZE);
+    index.flush(drv);
   }
+  else
+    index.flushBlock(drv, iter);
 
   writeEntry(*idxlen, entry);
-  flush();
+  super_block.flush(drv);
+  bitmap.flush(drv);
 
   return value;
 }
@@ -222,10 +227,18 @@ Value
 DBImpl::erase(Key key)
 {
   Buffer entry;
-  index.getterIterator(key, Utils::getDefaultHasher()->hash(key), entry)
-    .value() = index.pimpl->DELETED_VALUE;
+  auto iter = index.getterIterator(key, 
+    Utils::getDefaultHasher()->hash(key), entry);
+
+  iter.value() = index.pimpl->DELETED_VALUE;
+  bitmap.free(
+    reinterpret_cast<IndexLength*>(&iter.value())->index,
+    reinterpret_cast<IndexLength*>(&iter.value())->length
+  );
   super_block.setEntryCount(super_block.getEntryCount() - 1);
-  flush();
+  super_block.flush(drv);
+  bitmap.flush(drv);
+  index.flushBlock(drv, iter);
 
   return valueOfEntry(entry);
 }

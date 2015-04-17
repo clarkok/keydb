@@ -197,6 +197,20 @@ class DBImpl : public DB
     }
 
     inline void
+    flushBlock(Drive *drv, HashTable::Iterator iter)
+    {
+      auto block_offset = 
+        (reinterpret_cast<char*>(iter.entry) - pimpl->data.cbegin()) /
+        Config::BLOCK_SIZE;
+      drv->writeBlock(
+        owner->super_block.getIndexStart() + 
+          block_offset,
+        Buffer(pimpl->data.cdata() +
+          block_offset * Config::BLOCK_SIZE, Config::BLOCK_SIZE)
+      );
+    }
+
+    inline void
     reset()
     { pimpl.reset(new HashTable()); }
 
@@ -241,7 +255,7 @@ class DBImpl : public DB
       ) {
         if (iter.value() != pimpl->DELETED_VALUE) {
           entry = owner->readEntry(
-            *reinterpret_cast<IndexLength*>(iter.value())
+            *reinterpret_cast<IndexLength*>(&iter.value())
           );
           if (keyOfEntry(entry) == key)
             return iter;

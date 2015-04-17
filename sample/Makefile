@@ -1,4 +1,4 @@
-MK_CMD	= clang++ --std=c++11 -o $@ $< -L ../ -lkeydb
+MK_CMD	= clang++ -g -lprofiler --std=c++11 -o $@ $< -L ../ -lkeydb
 
 ALL		= sample1 sample2
 
