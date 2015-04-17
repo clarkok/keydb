@@ -208,6 +208,7 @@ DBImpl::insert(Key key, Value value)
     (entry.length() + Config::BLOCK_SIZE - 1) / Config::BLOCK_SIZE;
   idxlen->index = bitmap.alloc(idxlen->length);
 
+  writeEntry(*idxlen, entry);
   if (super_block.setEntryCount(super_block.getEntryCount() + 1)
       >= index.getUpperLimit()) {
     index.resize(index.getCapacity() * 2 * Config::BLOCK_SIZE);
@@ -215,8 +216,6 @@ DBImpl::insert(Key key, Value value)
   }
   else
     index.flushBlock(drv, iter);
-
-  writeEntry(*idxlen, entry);
   super_block.flush(drv);
   bitmap.flush(drv);
 

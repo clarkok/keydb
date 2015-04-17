@@ -2,7 +2,7 @@
 #include <iostream>
 #include <ctime>
 
-static const int TEST_COUNT = 10000;
+static const int TEST_COUNT = 100000;
 static const int TEST_LENGTH = 16;
 
 char RAND_STR[TEST_COUNT + TEST_LENGTH + 1];
@@ -39,7 +39,8 @@ main()
   catch(const KeyDB::Exception &e) {
     std::cout << e.toString() << std::endl;
   }
-  std::cout << "Random write: " << (std::clock() - start) / (double) CLOCKS_PER_SEC << std::endl;
+  auto duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+  std::cout << "Random write: " << duration << "s (aka. " << TEST_COUNT / duration << "op/s)" << std::endl;
 
   start = std::clock();
   try {
@@ -50,7 +51,8 @@ main()
   catch(const KeyDB::Exception &e) {
     std::cout << e.toString() << std::endl;
   }
-  std::cout << "Random read: " << (std::clock() - start) / (double) CLOCKS_PER_SEC << std::endl;
+  duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+  std::cout << "Random read: " << duration << "s (aka. " << TEST_COUNT / duration << "op/s)" << std::endl;
 
   start = std::clock();
   try {
@@ -61,7 +63,8 @@ main()
   catch(const KeyDB::Exception &e) {
     std::cout << e.toString() << std::endl;
   }
-  std::cout << "Rnadom Random read: " << (std::clock() - start) / (double) CLOCKS_PER_SEC << std::endl;
+  duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+  std::cout << "Random Random read: " << duration << "s (aka. " << TEST_COUNT / duration << "op/s)" << std::endl;
 
   return 0;
 }
