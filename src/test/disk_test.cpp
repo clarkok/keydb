@@ -31,9 +31,11 @@ TEST(NaiveDiskTest, Operation)
   Buffer buf(TEST_STRING);
   ASSERT_EQ(1, uut.writeBlock(0, buf));
   Buffer r = uut.readBlock(0);
-  ASSERT_STREQ(TEST_STRING, r.cdata());
+  r.reserve(buf.length());
+  ASSERT_EQ(buf, r);
 
   ASSERT_EQ(1, uut.writeBlock(10, buf));
   r = uut.readBlock(10);
-  ASSERT_STREQ(TEST_STRING, r.cdata());
+  r.reserve(buf.length());
+  ASSERT_EQ(buf, r);
 }

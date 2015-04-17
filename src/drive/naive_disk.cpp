@@ -13,19 +13,6 @@ NaiveDisk::~NaiveDisk()
 }
 
 Buffer
-NaiveDisk::extendBuffer(Buffer src) const
-{
-  auto original_length = src.length();
-  src.reserve(
-    (
-      (original_length + Config::BLOCK_SIZE + 1) / Config::BLOCK_SIZE
-    ) * Config::BLOCK_SIZE
-  );
-  std::fill(src.data() + original_length, src.end(), 0);
-  return src;
-}
-
-Buffer
 NaiveDisk::readBlocks(Config::size_t index, Config::size_t count)
 {
   if (!fd) {
@@ -51,7 +38,6 @@ NaiveDisk::writeBlocks(
   Config::size_t count,
   Buffer buf)
 {
-  buf = extendBuffer(buf);
   if (!fd) {
     THROW_EXCEPTION(
       E_IO_ERROR,

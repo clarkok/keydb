@@ -9,8 +9,8 @@ ALL_TARGET : $(ALL)
 clean:
 	rm -rf $(ALL)
 
-sample1 : sample1.cpp
+sample1 : sample1.cpp ../libkeydb.a
 	$(MK_CMD)
 
-sample2 : sample2.cpp
+sample2 : sample2.cpp ../libkeydb.a
 	$(MK_CMD)

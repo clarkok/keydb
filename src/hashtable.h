@@ -2,6 +2,7 @@
 #define _KEYDB_HASHTABLE_H_
 
 #include <limits>
+#include <cstdlib>
 
 #include "config.h"
 #include "lib/buffer.h"
@@ -127,7 +128,7 @@ public:
   HashTable()
   : data(Config::BLOCK_SIZE),
     capacity(Config::BLOCK_SIZE / sizeof(Entry))
-  { std::fill(data.begin(), data.end(), 0); }
+  { std::memset(data.begin(), 0, data.length()); }
 
   HashTable(Buffer data)
   : data(data),
@@ -181,7 +182,7 @@ public:
   resize(Config::size_t size)
   {
     Buffer new_data(size);
-    std::fill(new_data.begin(), new_data.end(), 0);
+    std::memset(new_data.begin(), 0, new_data.length());
 
     std::swap(data, new_data);
 

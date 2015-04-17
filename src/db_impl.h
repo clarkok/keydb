@@ -62,7 +62,7 @@ class DBImpl : public DB
     inline void 
     reset()
     {
-      std::fill(data->padding, data->padding + sizeof(data), 0);
+      std::memset(data->padding, 0, sizeof(data->padding));
 
       std::memcpy(
         reinterpret_cast<void*>(data->data.magic),

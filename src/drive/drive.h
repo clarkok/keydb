@@ -89,8 +89,6 @@ class NaiveDisk : public Drive
   std::FILE *fd = nullptr;
   Slice path;
 
-  Buffer extendBuffer(Buffer src) const;
-
 public:
   NaiveDisk(Slice path = Slice())
   : path(path)
