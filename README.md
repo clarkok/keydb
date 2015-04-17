@@ -66,7 +66,7 @@ Environment:
   Core i7, 4GB Memory, SSD
   Archlinux inside VirtualBox
 
-Time to complete 10000 ops each:
+Time to complete 100,000 ops each:
   Random write: 0.700915s (aka. 142671op/s)
   Random read: 0.081345s (aka. 1.22933e+06op/s)
   Random Random read: 0.147683s (aka. 677126op/s)
