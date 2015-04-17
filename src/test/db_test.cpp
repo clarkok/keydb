@@ -12,6 +12,9 @@ static const char RESETING_DB_PATH[] =
 static const char OPERATION_DB_PATH[] =
   "test_data/db_test_operation.db";
 
+static const char ERASE_DB_PATH[] =
+  "test_data/db_test_erasing.db";
+
 TEST(DBTest, Reseting)
 {
   DBImpl *uut = dynamic_cast<DBImpl*>(
@@ -86,4 +89,27 @@ TEST(DBTest, Operation)
   }
 
   EXPECT_THROW({uut->insert("Test", "test1");}, Exception);
+}
+
+TEST(DBTest, Erasing)
+{
+  DBImpl *uut = dynamic_cast<DBImpl*>(
+    createDiskDB(ERASE_DB_PATH));
+
+  try {
+    uut->reset();
+    uut->insert("Test", "test");
+
+    ASSERT_EQ("test", uut->get("Test"));
+
+    uut->erase("Test");
+  }
+  catch (const Exception &e) {
+    ASSERT_EQ("", e.toString());
+    uut->close();
+  };
+
+  EXPECT_THROW({ uut->get("Test"); }, Exception);
+
+  uut->close();
 }

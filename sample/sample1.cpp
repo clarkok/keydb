@@ -12,5 +12,7 @@ main()
   db->insert("Clarkok", "Hello world");
   std::cout << db->get("Clarkok") << std::endl;
 
+  db->close();
+
   return 0;
 }
