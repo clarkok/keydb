@@ -293,9 +293,11 @@ class DBImpl : public DB
   static Key keyOfEntry(Buffer entry);
   static Value valueOfEntry(Buffer entry);
 
-  Buffer readEntry(IndexLength index_length);
+  inline Buffer
+  readEntry(IndexLength index_length)
+  { return drv->readBlocks(index_length.index, index_length.length); }
 
-  void
+  inline void
   writeEntry(IndexLength idxlen, Buffer entry)
   { drv->writeBlocks(idxlen.index, idxlen.length, entry); }
 

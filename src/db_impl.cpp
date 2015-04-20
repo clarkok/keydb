@@ -15,12 +15,6 @@ KeyDB::createDiskDB(const char *path)
 }
 
 inline Buffer
-DBImpl::readEntry(IndexLength index_length)
-{
-  return drv->readBlocks(index_length.index, index_length.length);
-}
-
-inline Buffer
 DBImpl::makeEntry(Key key, Config::size_t hash_code, Value value)
 {
   Buffer ret(
