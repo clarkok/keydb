@@ -82,6 +82,8 @@ TEST(DBTest, Operation)
       uut->insert(buffer, buffer);
       ASSERT_EQ(buffer, uut->get(buffer));
     }
+
+    uut->close();
   } 
   catch (const Exception &e) {
     ASSERT_EQ("", e.toString());
@@ -89,6 +91,24 @@ TEST(DBTest, Operation)
   }
 
   EXPECT_THROW({uut->insert("Test", "test1");}, Exception);
+}
+
+TEST(DBTest, EmptyInsertion)
+{
+  DBImpl *uut = dynamic_cast<DBImpl*>(
+    createDiskDB(OPERATION_DB_PATH));
+
+  try {
+    uut->reset();
+    uut->insert("Test", Value());
+    auto value = uut->get("Test");
+    ASSERT_EQ(0, value.length());
+    uut->close();
+  }
+  catch (const Exception &e) {
+    ASSERT_EQ("", e.toString());
+    uut->close();
+  }
 }
 
 TEST(DBTest, Erasing)
