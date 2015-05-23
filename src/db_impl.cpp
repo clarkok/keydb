@@ -29,15 +29,19 @@ DBImpl::makeEntry(Key key, Config::size_t hash_code, Value value)
   );
 
   *reinterpret_cast<Config::size_t*>(ret.data()) = hash_code;
+
   *reinterpret_cast<Config::size_t*>(ret.data() + sizeof(Config::size_t)) =
     key.length();
+
   std::memcpy(
     reinterpret_cast<void*>(ret.data() + 2 * sizeof(Config::size_t)),
     reinterpret_cast<const void*>(key.data()),
     key.length());
+
   *reinterpret_cast<Config::size_t*>(
     ret.data() + 2 * sizeof(Config::size_t) + key.length()) = 
     value.length();
+
   std::memcpy(
     reinterpret_cast<void*>(
       ret.data() + 3 * sizeof(Config::size_t) + key.length()),
@@ -223,11 +227,11 @@ DBImpl::erase(Key key)
   auto iter = index.getterIterator(key, 
     Utils::getDefaultHasher()->hash(key), entry);
 
-  iter.value() = index.pimpl->DELETED_VALUE;
   bitmap.free(
     reinterpret_cast<IndexLength*>(&iter.value())->index,
     reinterpret_cast<IndexLength*>(&iter.value())->length
   );
+  iter.value() = index.pimpl->DELETED_VALUE;
   super_block.setEntryCount(super_block.getEntryCount() - 1);
   super_block.flush(drv);
   bitmap.flush(drv);

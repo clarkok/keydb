@@ -14,8 +14,15 @@ class Slice
   const char *data_;
   Config::size_t length_;
 public:
-  Slice(const char *data_ = nullptr, Config::size_t length_ = 0)
-  : data_(data_), length_(data_ ? (length_ ? length_ : std::strlen(data_)) : 0)
+  Slice(
+    const char *data_ = nullptr, 
+    Config::size_t length_ = std::numeric_limits<Config::size_t>::max()
+  )
+  : data_(data_), 
+    length_(
+      data_ 
+      ? (length_ != std::numeric_limits<Config::size_t>::max() ? length_ : std::strlen(data_)) 
+      : 0)
   { }
 
   Slice(const Slice &) = default;

@@ -52,10 +52,12 @@ public:
   content_(pimpl->content), length_(length)
   { }
 
-  Buffer(const char *data, Config::size_t length = 0)
+  Buffer(
+    const char *data,
+    Config::size_t length = std::numeric_limits<Config::size_t>::max())
   : pimpl(data ? 
     sharedPtrFactory(
-      bufferImplFactory(length ? length : length = std::strlen(data))
+      bufferImplFactory(length != std::numeric_limits<Config::size_t>::max() ? length : length = std::strlen(data))
     ) : nullptr),
   content_(data ? pimpl->content : nullptr), length_(data ? length : 0)
   { if (data) std::memcpy(pimpl->content, data, length); }
