@@ -26,7 +26,7 @@ DEPENDENCY_DIR	= dep/
 COMPILER	= clang++
 LINKER		= clang++
 
-COMMON_FLAGS	= -O2 -std=c++11 -Wall -g -I$(INCLUDE_DIR) -Iinclude/keydb/
+COMMON_FLAGS	= -std=c++11 -Wall -g -I$(INCLUDE_DIR) -Iinclude/keydb/
 COMPILE_FLAGS	= $(COMMON_FLAGS) -c
 LINK_FLAGS	= $(COMMON_FLAGS) -g -lpthread -lgtest -lgtest_main -lcrypto -L/usr/lib
 DEP_FLAGS	= $(COMMON_FLAGS) -MM -MF $(DEPENDENCY_DIR)$$(addsuffix .d,$$(basename $$(subst /,-,$$<)))
