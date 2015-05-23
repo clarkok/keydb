@@ -111,6 +111,25 @@ TEST(DBTest, EmptyInsertion)
   }
 }
 
+TEST(DBTest, EmptyUpdate)
+{
+  DBImpl *uut = dynamic_cast<DBImpl*>(
+    createDiskDB(OPERATION_DB_PATH));
+
+  try {
+    uut->open();
+    uut->update("Test", Value());
+    auto value = uut->get("Test");
+    ASSERT_EQ(0, value.length());
+    uut->close();
+  }
+  catch (const Exception &e) {
+    ASSERT_EQ("", e.toString());
+    ASSERT_EQ(true, false);
+    uut->close();
+  }
+}
+
 TEST(DBTest, Erasing)
 {
   DBImpl *uut = dynamic_cast<DBImpl*>(
